@@ -1,1 +1,7 @@
-<p>dashboard works!</p>
+<div class="container">
+  <div class="cards" appSwipeCards (cardSwiped)="onCardSwiped($event)">
+    @for ( card of activeDogCard();let i=$index; track card.id) {
+      <app-dog-card [data]="card" appSwipeCard (cardSwiped)="onCardSwiped({direction: $event, index: i})"></app-dog-card>
+    }
+  </div>
+</div>

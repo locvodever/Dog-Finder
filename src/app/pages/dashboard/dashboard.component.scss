@@ -1,0 +1,15 @@
+.container {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.cards {
+  flex-grow: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  height: 100%;
+}

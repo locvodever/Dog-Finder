@@ -25,6 +25,9 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "hammerjs"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
