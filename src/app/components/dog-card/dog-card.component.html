@@ -1,13 +1,31 @@
 <mat-card class="dog-card">
-  <div class="image" [ngStyle]="{'background-image' : data.thumbnailUrl ? 'url('+data.thumbnailUrl+')' : 'none'}">
-    <div class="detail" >
+  <div class="image"
+    [ngStyle]="{'background-image' : (thumbnailUrl$ | async) ? 'url('+(thumbnailUrl$ | async)+')' : 'none'}">
+    <div class="detail">
       <h2>
         {{data.name}}
       </h2>
+      <p>
+        <label>Breed For</label>
+        {{data.bred_for}}
+      </p>
       @if (detaiPage) {
-        <h2>
-          {{data.name}}
-        </h2>
+      <p>
+        <label>Weight & Height</label>
+        {{data.weight.metric}} & {{data.height.metric}}
+      </p>
+      <p>
+        <label>Breed Group</label>
+        {{data.breed_group}}
+      </p>
+      <p>
+        <label>Temperament</label>
+        {{data.temperament}}
+      </p>
+      <p>
+        <label>Life Span</label>
+        {{data.life_span}}
+      </p>
       }
     </div>
   </div>
@@ -16,11 +34,11 @@
       <mat-icon>close</mat-icon>
     </button>
     @if (!detaiPage) {
-      <a mat-mini-fab color="null" aria-label="Info" [routerLink]="['/detail', data.id]">
-        <mat-icon>info</mat-icon>
-      </a>
+    <a mat-mini-fab color="null" aria-label="Info" [routerLink]="['/detail', data.id]">
+      <mat-icon>info</mat-icon>
+    </a>
     }
-  
+
     <button mat-fab color="primary" aria-label="Like" (click)="onCardSwiped('right')">
       <mat-icon>favorite</mat-icon>
     </button>

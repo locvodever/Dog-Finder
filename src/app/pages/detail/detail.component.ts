@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { Dog } from '../../models/dog';
-import { Observable, of } from 'rxjs';
+import { DogBreed } from '../../models/dog';
+import { Observable, of, share } from 'rxjs';
 import { DogCardComponent } from '@components/dog-card/dog-card.component';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { MainService } from '../../services/main.service';
+import { UserDataService } from '../../services/user-data.service';
 
 @Component({
   selector: 'app-detail',
@@ -16,19 +18,17 @@ export class DetailComponent {
   @Input()
   set id(id: string) {
     console.log(id);
-    this.dog$ = of({
-      id: 4,
-      name: 'Corgi 4',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },);
+    this.dog$ = this.mainService.getBreed(id);
   }
 
-  dog$!: Observable<Dog>
+  dog$!: Observable<DogBreed>
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private mainService: MainService, private userDataService: UserDataService) {}
 
-  onCardSwiped(direction:'left' | 'right') {
+  onCardSwiped(direction:'left' | 'right', dog: DogBreed) {
     console.log(direction);
+    this.userDataService.votedDogbreed(dog.id);
+    this.mainService.postVote(dog.reference_image_id, direction === 'left' ? -1 : 1).subscribe();
     this.router.navigate(['']);
   }
 }

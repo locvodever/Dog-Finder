@@ -34,6 +34,14 @@
   flex-direction: column;
   align-items: start;
   margin: 16px;
+  text-align: start;
+  text-shadow: 0 0 10px #FFF, 0 0 1px #FFF, 0 0 2px #FFF, 0 0 3px #FFF, 0 0 4px #FFF, 0 0 5px #FFF, 0 0 6px #FFF;
+  p {
+    display: grid;
+  }
+  label {
+    font-weight: 500;
+  }
 }
 
 mat-card-actions {

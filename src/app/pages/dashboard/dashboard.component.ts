@@ -1,11 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
-import {MatCardModule} from '@angular/material/card';
-import { Dog } from '../../models/dog';
+import { MatCardModule } from '@angular/material/card';
+import { DogBreed } from '../../models/dog';
 import { DogCardComponent } from '@components/dog-card/dog-card.component';
 import { SwipeCardDirective, SwipeCardsDirective } from '../../directives/swipe-card.directive';
-
+import { MainService } from '../../services/main.service';
+import { HttpClientModule } from '@angular/common/http';
+import { UserDataService } from '../../services/user-data.service';
 
 const CoreModules = [AsyncPipe];
 const MaterialModules = [MatCardModule];
@@ -18,50 +20,40 @@ const MaterialModules = [MatCardModule];
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
-  dogDatas: Dog[] = [
-    {
-      id: 0,
-      name: 'Corgi',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },
-    {
-      id: 1,
-      name: 'Corgi 1',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },
-    {
-      id: 2,
-      name: 'Corgi 2',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },
-    {
-      id: 3,
-      name: 'Corgi 3',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },
-    {
-      id: 4,
-      name: 'Corgi 4',
-      thumbnailUrl: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
-    },
-  ];
-
-  activeDogCard = signal<Dog[]|null>(null);
-
-  constructor() {}
+  activeDogCards = signal<DogBreed[] | null>(null);
+  page = 0;
+  limit = 10;
+  constructor(private mainService: MainService, private userDataService: UserDataService) {}
 
   ngOnInit() {
-    this.loadDogCards();
+    const { page, breedIdsVotedInCurrentPage } = this.userDataService.data;
+    this.page = page;
+    this.loadDogCards(this.page, breedIdsVotedInCurrentPage);
   }
 
-  onCardSwiped(event: {direction:'left' | 'right', index: number}) {
-    const {direction, index} = event
-    console.log(direction, index);
-    this.dogDatas.splice(0, 1);
-    this.loadDogCards();
+  onCardSwiped(event: { direction: 'left' | 'right'; index: number }) {
+    const { direction, index } = event;
+    const dogCards = this.activeDogCards();
+
+    if (!(dogCards && dogCards[0])) {
+      return;
+    }
+    const [dogBreed] = dogCards.splice(0, 1);
+    this.activeDogCards.set(dogCards);
+
+    this.userDataService.votedDogbreed(dogBreed.id);
+
+    if (dogCards.length < 3) {
+      this.loadDogCards(this.page + 1);
+    }
+    this.mainService.postVote(dogBreed.reference_image_id, direction === 'left' ? -1 : 1).subscribe();
   }
 
-  private loadDogCards() {
-    this.activeDogCard.set(this.dogDatas);
+  private loadDogCards(page: number, breedIdsVotedInCurrentPage?: number[]) {
+    this.mainService.getBreeds(page, this.limit).subscribe((breeds) => {
+      const currenCards = this.activeDogCards() || [];
+      const fitlerBreeds = breeds.filter((e) => !(breedIdsVotedInCurrentPage || []).includes(e.id));
+      this.activeDogCards.set([...currenCards, ...fitlerBreeds]);
+    });
   }
 }

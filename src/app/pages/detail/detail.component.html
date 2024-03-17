@@ -1,5 +1,5 @@
 <div class="container">
   @if (dog$ | async; as dog) {
-  <app-dog-card [data]="dog" [detaiPage]="true" (cardSwiped)="onCardSwiped($event)"></app-dog-card>
+  <app-dog-card [data]="dog" [detaiPage]="true" (cardSwiped)="onCardSwiped($event, dog)"></app-dog-card>
   }
 </div>
