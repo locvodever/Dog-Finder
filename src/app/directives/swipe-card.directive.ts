@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, ContentChildren, Directive, ElementRef, EventEmitter, NgZone, Output, QueryList, output } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, ContentChildren, Directive, ElementRef, EventEmitter, NgZone, OnDestroy, Output, QueryList } from '@angular/core';
 import 'hammerjs';
 import { Subject } from 'rxjs';
 
@@ -9,16 +9,14 @@ import { Subject } from 'rxjs';
 export class SwipeCardDirective {
   removed = false;
   constructor(public el: ElementRef, private cd: ChangeDetectorRef) {}
-  ngOnInit() {}
 }
 
 @Directive({
   selector: '[appSwipeCards]',
   standalone: true,
 })
-export class SwipeCardsDirective implements AfterContentInit {
+export class SwipeCardsDirective implements AfterContentInit, OnDestroy {
   @ContentChildren(SwipeCardDirective) cards!: QueryList<SwipeCardDirective>;
-  @Output() loaded = new EventEmitter<boolean>();
   @Output() cardSwiped = new EventEmitter<{ direction: 'left' | 'right'; index: number }>();
 
   private destroy$ = new Subject<void>();
@@ -42,7 +40,6 @@ export class SwipeCardsDirective implements AfterContentInit {
       card.el.nativeElement.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
       card.el.nativeElement.style.opacity = (10 - index) / 10;
     });
-    this.loaded.next(true);
     if (cards[0]) {
       this.initListener(cards[0], 0);
     }

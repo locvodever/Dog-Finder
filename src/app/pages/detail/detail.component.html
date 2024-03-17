@@ -1,1 +1,5 @@
-<p>detail works!</p>
+<div class="container">
+  @if (dog$ | async; as dog) {
+  <app-dog-card [data]="dog" [detaiPage]="true" (cardSwiped)="onCardSwiped($event)"></app-dog-card>
+  }
+</div>

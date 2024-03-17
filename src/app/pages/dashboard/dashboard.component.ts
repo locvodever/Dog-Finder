@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import {MatCardModule} from '@angular/material/card';
@@ -17,7 +17,7 @@ const MaterialModules = [MatCardModule];
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   dogDatas: Dog[] = [
     {
       id: 0,

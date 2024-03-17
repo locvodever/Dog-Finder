@@ -1,17 +1,28 @@
 <mat-card class="dog-card">
   <div class="image" [ngStyle]="{'background-image' : data.thumbnailUrl ? 'url('+data.thumbnailUrl+')' : 'none'}">
+    <div class="detail" >
+      <h2>
+        {{data.name}}
+      </h2>
+      @if (detaiPage) {
+        <h2>
+          {{data.name}}
+        </h2>
+      }
+    </div>
   </div>
-  <mat-card-content>
-    <h2>
-      {{data!.name}}
-    </h2>
-  </mat-card-content>
   <mat-card-actions>
     <button mat-fab aria-label="Dislike" (click)="onCardSwiped('left')">
       <mat-icon>close</mat-icon>
     </button>
+    @if (!detaiPage) {
+      <a mat-mini-fab color="null" aria-label="Info" [routerLink]="['/detail', data.id]">
+        <mat-icon>info</mat-icon>
+      </a>
+    }
+  
     <button mat-fab color="primary" aria-label="Like" (click)="onCardSwiped('right')">
-      <mat-icon>done</mat-icon>
+      <mat-icon>favorite</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>

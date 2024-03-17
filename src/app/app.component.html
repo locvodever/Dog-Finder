@@ -1,13 +1,18 @@
 <mat-toolbar>
-  <span>{{title}}</span>
+  @if (showBack$ | async; as showBack) {
+    <button mat-icon-button aria-label="Back" (click)="onback()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  }
+
+  <span>{{title$ | async}}</span>
   <span class="spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+  <button mat-icon-button aria-label="Favorite">
     <mat-icon>favorite</mat-icon>
   </button>
 </mat-toolbar>
 <mat-drawer-container class="root-container">
   <mat-drawer-content>
     <router-outlet></router-outlet>
-
   </mat-drawer-content>
 </mat-drawer-container>

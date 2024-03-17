@@ -1,5 +1,5 @@
 export interface Dog {
-  id: any;
+  id: number;
   name: string;
   thumbnailUrl: string;
 }

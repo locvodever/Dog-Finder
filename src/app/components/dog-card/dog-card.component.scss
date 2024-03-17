@@ -26,6 +26,16 @@
   background-repeat: no-repeat;
 }
 
+.detail {
+  display: flex;
+  margin-top: auto;
+  height: 100%;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: start;
+  margin: 16px;
+}
+
 mat-card-actions {
   display: flex;
   justify-content: space-around;
